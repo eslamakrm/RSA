@@ -18,7 +18,7 @@ def EEA(r0, r1): #r0 > r1
         s0, t0, s1, t1 = [ s1 - q*s0, t1 - q*t0, s0, t0 ]
     return [ r0, t1, s1 ] #[gcd , inverse of r1 , ]
     
-def invmod(mod, a):
+def modularInverse(mod, a):
     gcd, s1 , inverse = EEA(mod, a)
     
     return None if gcd != 1 else (inverse % mod)
@@ -31,7 +31,8 @@ def RSAparameters():
     minPrivateKeyBitLen = int(0.3*(len(bin(n))-2))
     numberOfPrimes = (p-1)*(q-1)
     e,d = selectPrimeExponent(numberOfPrimes,minPrivateKeyBitLen)
-
+    #e = 65537 
+    #d = invmod(e,numberOfPrimes)
     
     return p,q,e,d
    
@@ -62,7 +63,7 @@ def decryptCRT(cipherText,privateKey,p,q):
     yp , yq = [cipherText % p , cipherText % q]
     dp ,dq = [privateKey % (p-1) , privateKey % (q-1)]
     xp , xq = [squareAndMultiply(yp,dp,p) , squareAndMultiply(yq,dq,q)]
-    cp , cq = [invmod(q,p%q),invmod(p,q%p)]
+    cp , cq = [modularInverse(p,q%p),modularInverse(q,p%q)]
     
     x = ((q*cp*xp) + (p*cq*xq)) % (p*q)
     return x
@@ -100,17 +101,12 @@ def selectPrimeExponent(limit,minPrivateKeyBitLen):
     d = None
     while d == None:
         e = int(random.randint(1,limit-1))
-        d = invmod(limit,e)
+        d = modularInverse(limit,e)
         if d != None:
             if len(bin(d))-2 < minPrivateKeyBitLen:
                 d = None
     return e,d
 
-############################ test #####################################
-p,q,e,d = RSAparameters()
-n = p*q
-publicKey = [n,e]
-privateKey = d
 
 def stringToAscii(s):
     return int(''.join((str(ord(c)+100)) for c in s)) # +100 to make all numbers have 3 digits
@@ -127,21 +123,54 @@ def asciiToString(a):
     res = [int(c)-100 for c in res]
     return ''.join(chr(i) for i in res)
 
-#print asciiToString(decryptMessage(encryptMessage(stringToAscii("eslam akrm hassan") , publicKey) , privateKey,p,q))
+def partitioningPlainText(text): # too long string cause undeterministic behavior (string over 102 char)
+     length=100;                   
+     return [text[i:i+length] for i in range(0, len(text), length)]
 
 
+
+
+######################  finding parameter ############################  
+useCRT = raw_input("use chineese remainder theorem ? (y,n)\n" )
+useCRT = True if useCRT == 'y' else False
 a = time.clock()
-x = stringToAscii("lablablaaaaa!@#$%^&*()")
-print "stringToAscii Time ="+ str(time.clock()-a)
+p,q,e,d = RSAparameters()
+print "time to find parameters = " + str(time.clock()-a)
+n = p*q
+publicKey = [n,e]
+privateKey = d
+print "public key :"
+print "n = " + str(n)
+print "e = " + str(e)
+print "private key = " + str(d)
 
+print "#################################################################"
+#####################################################################
+
+###################### string To ASCII ############################ 
+#a = time.clock()
+Input = raw_input("Enter the PlainText : ")
+partitionedInput = partitioningPlainText(Input)
+asciiInput = [stringToAscii(aa) for aa in partitionedInput ]
+#print "stringToAscii Time ="+ str(time.clock()-a)
+#####################################################################
+
+
+###################### Encryption ############################ 
 a = time.clock()
-y = encryptMessage(x,publicKey)
+cipherText = [encryptMessage(aa,publicKey) for aa in asciiInput ]
 print "ecryption Time = " + str(time.clock()-a)
+print "#################################################################"
+#####################################################################
 
+###################### Dencryption ############################ 
 a = time.clock()
-x_y = decryptMessage(y,privateKey,p,q,useCRT=False)
+plainText = [decryptMessage(aaa,privateKey,p,q,useCRT=useCRT) for aaa in cipherText]
 print "ecryption Time = " + str(time.clock()-a)
+print "#################################################################"
+#####################################################################
 
-a = time.clock()
-print asciiToString(x_y)
-print "AsciiToString Time = " + str(time.clock()-a)
+#a = time.clock()
+output = [asciiToString(z) for z in plainText]
+print "PlainText after decryption :" + ''.join(output)
+#print "AsciiToString Time = " + str(time.clock()-a)
