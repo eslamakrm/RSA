@@ -132,7 +132,7 @@ def partitioningPlainText(text): # too long string cause undeterministic behavio
 
 ######################  finding parameter ############################  
 useCRT = raw_input("use chineese remainder theorem ? (y,n)\n" )
-useCRT = True if useCRT == 'y' else False
+useCRT = True if (useCRT == 'y'or useCRT == 'Y') else False
 a = time.clock()
 p,q,e,d = RSAparameters()
 print "time to find parameters = " + str(time.clock()-a)
