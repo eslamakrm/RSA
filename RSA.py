@@ -31,9 +31,6 @@ def RSAparameters():
     minPrivateKeyBitLen = int(0.3*(len(bin(n))-2))
     numberOfPrimes = (p-1)*(q-1)
     e,d = selectPrimeExponent(numberOfPrimes,minPrivateKeyBitLen)
-    #e = 65537 
-    #d = invmod(e,numberOfPrimes)
-    
     return p,q,e,d
    
 def squareAndMultiply(x,e,mod): # x^e % mod
@@ -85,10 +82,6 @@ def Miller_RabinTest(primeCandidate , s):
             if z != primeCandidate-1:
                 return False  #composite
     return True   #likely prime
-
-    
-#print int(os.urandom(64).encode('hex'),16) #512 bit random number
-#   
     
 def primeNumberGenerator():
      p = int(os.urandom(64).encode('hex'),16)
@@ -170,7 +163,6 @@ print "ecryption Time = " + str(time.clock()-a)
 print "#################################################################"
 #####################################################################
 
-#a = time.clock()
 output = [asciiToString(z) for z in plainText]
 print "PlainText after decryption :" + ''.join(output)
-#print "AsciiToString Time = " + str(time.clock()-a)
+
