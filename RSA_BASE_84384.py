@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Apr 17 22:15:51 2018
+
 @author: EslamAkrm
 """
 import time
@@ -29,9 +30,10 @@ def RSAparameters():
     n = p*q
     minPrivateKeyBitLen = int(0.3*(len(bin(n))-2))
     numberOfPrimes = (p-1)*(q-1)
-
     e,d = selectPrimeExponent(numberOfPrimes,minPrivateKeyBitLen)
-
+    #e = 65537 
+    #d = invmod(e,numberOfPrimes)
+    
     return p,q,e,d
    
 def squareAndMultiply(x,e,mod): # x^e % mod
@@ -83,6 +85,10 @@ def Miller_RabinTest(primeCandidate , s):
             if z != primeCandidate-1:
                 return False  #composite
     return True   #likely prime
+
+    
+#print int(os.urandom(64).encode('hex'),16) #512 bit random number
+#   
     
 def primeNumberGenerator():
      p = int(os.urandom(64).encode('hex'),16)
@@ -126,9 +132,7 @@ def partitioningPlainText(text): # too long string cause undeterministic behavio
 
 ######################  finding parameter ############################  
 useCRT = raw_input("use chineese remainder theorem ? (y,n)\n" )
-
-useCRT = True if (useCRT == 'y'or useCRT == 'Y') else False
-
+useCRT = True if useCRT == 'y' else False
 a = time.clock()
 p,q,e,d = RSAparameters()
 print "time to find parameters = " + str(time.clock()-a)
@@ -166,6 +170,7 @@ print "ecryption Time = " + str(time.clock()-a)
 print "#################################################################"
 #####################################################################
 
+#a = time.clock()
 output = [asciiToString(z) for z in plainText]
 print "PlainText after decryption :" + ''.join(output)
-
+#print "AsciiToString Time = " + str(time.clock()-a)

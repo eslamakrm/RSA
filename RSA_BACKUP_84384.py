@@ -29,9 +29,14 @@ def RSAparameters():
     n = p*q
     minPrivateKeyBitLen = int(0.3*(len(bin(n))-2))
     numberOfPrimes = (p-1)*(q-1)
-
+<<<<<<< HEAD
     e,d = selectPrimeExponent(numberOfPrimes,minPrivateKeyBitLen)
-
+=======
+    #e,d = selectPrimeExponent(numberOfPrimes,minPrivateKeyBitLen)
+    e = 65537 
+    d = modularInverse(numberOfPrimes,e)
+    
+>>>>>>> staticPrimeExponent
     return p,q,e,d
    
 def squareAndMultiply(x,e,mod): # x^e % mod
@@ -126,9 +131,11 @@ def partitioningPlainText(text): # too long string cause undeterministic behavio
 
 ######################  finding parameter ############################  
 useCRT = raw_input("use chineese remainder theorem ? (y,n)\n" )
-
+<<<<<<< HEAD
 useCRT = True if (useCRT == 'y'or useCRT == 'Y') else False
-
+=======
+useCRT = True if useCRT == 'y' or useCRT == 'Y'  else False
+>>>>>>> staticPrimeExponent
 a = time.clock()
 p,q,e,d = RSAparameters()
 print "time to find parameters = " + str(time.clock()-a)

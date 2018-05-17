@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Apr 17 22:15:51 2018
+
 @author: EslamAkrm
 """
 import time
@@ -29,9 +30,7 @@ def RSAparameters():
     n = p*q
     minPrivateKeyBitLen = int(0.3*(len(bin(n))-2))
     numberOfPrimes = (p-1)*(q-1)
-
     e,d = selectPrimeExponent(numberOfPrimes,minPrivateKeyBitLen)
-
     return p,q,e,d
    
 def squareAndMultiply(x,e,mod): # x^e % mod
@@ -126,9 +125,7 @@ def partitioningPlainText(text): # too long string cause undeterministic behavio
 
 ######################  finding parameter ############################  
 useCRT = raw_input("use chineese remainder theorem ? (y,n)\n" )
-
 useCRT = True if (useCRT == 'y'or useCRT == 'Y') else False
-
 a = time.clock()
 p,q,e,d = RSAparameters()
 print "time to find parameters = " + str(time.clock()-a)
