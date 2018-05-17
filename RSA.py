@@ -31,7 +31,7 @@ def RSAparameters():
     numberOfPrimes = (p-1)*(q-1)
     #e,d = selectPrimeExponent(numberOfPrimes,minPrivateKeyBitLen)
     e = 65537 
-    d = modularInverse(e,numberOfPrimes)
+    d = modularInverse(numberOfPrimes,e)
     
     return p,q,e,d
    
