@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Apr 17 22:15:51 2018
-
 @author: EslamAkrm
 """
 import time
@@ -30,9 +29,9 @@ def RSAparameters():
     n = p*q
     minPrivateKeyBitLen = int(0.3*(len(bin(n))-2))
     numberOfPrimes = (p-1)*(q-1)
-    e,d = selectPrimeExponent(numberOfPrimes,minPrivateKeyBitLen)
-    #e = 65537 
-    #d = invmod(e,numberOfPrimes)
+    #e,d = selectPrimeExponent(numberOfPrimes,minPrivateKeyBitLen)
+    e = 65537 
+    d = modularInverse(e,numberOfPrimes)
     
     return p,q,e,d
    
